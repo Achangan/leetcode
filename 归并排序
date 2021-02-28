@@ -1,0 +1,63 @@
+package leetcode.排序;
+
+import java.util.Scanner;
+
+public class 归并排序 {
+
+    static int MAX = 500;
+    static int SENTINEL = 2000;
+    static int[] L = new int[MAX/2+2];
+    static int[] R = new int[MAX/2+2];
+    static int cut;
+    static void mergeSort(int[] A,int n,int left,int right){
+        if (left < right - 1) {
+            int mid = (right + left) / 2;
+            mergeSort(A,n,left,mid);
+            mergeSort(A,n,mid,right);
+            merge(A,n,left,mid,right);
+        }
+    }
+
+    static void merge(int[] A,int n,int left,int mid,int right){
+        int n1 = mid - left;
+        int n2 = right - mid;
+        for (int i = 0; i < n1; i++) {
+            L[i] = A[left+i];
+        }
+        for (int i = 0; i < n2; i++) {
+            R[i] = A[mid+i];
+        }
+        L[n1] = R[n2] = SENTINEL;
+        int i = 0,j = 0;
+        for (int k = left; k < right; k++) {
+            cut++;
+            if (L[i]<=R[j])
+                A[k] = L[i++];
+            else
+                A[k] = R[j++];
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        int[] A = new int[MAX];
+        int n,i;
+        n = input.nextInt();
+        for (i = 0;  i<n ; i++) {
+            A[i] = input.nextInt();
+        }
+
+        mergeSort(A,n,0,n);
+
+        for (i = 0;i < n;i++)
+        {
+            if (i!=0)
+                System.out.print(" ");
+            System.out.print(A[i]);
+        }
+
+        System.out.println(" "+cut);
+
+    }
+}
